@@ -11,17 +11,20 @@ import java.util.Properties;
 import java.util.Scanner;
 
 public class MyFramework {
-	private static final String nombreArchivoPropiedades = "config.properties";
+	public static final String defaultRutaArchivoPropiedades = "config.properties";
 	private static final String propname_acciones = "acciones";
 	private List<Accion> acciones;
 	private List<String> nombreclase_acciones;
+	private final String rutaArchivoPropiedades;
 
 	private boolean salir_del_programa;
 	private Accion accion_salir;
 
 	private Scanner scanner;
 
-	public MyFramework() {
+	public MyFramework(String rutaArchivoPropiedades) {
+		Objects.requireNonNull(rutaArchivoPropiedades);
+		this.rutaArchivoPropiedades = rutaArchivoPropiedades;
 		procesarConfiguracion();
 		prepararListaDeAcciones();
 
@@ -50,10 +53,10 @@ public class MyFramework {
 	private void procesarConfiguracion() {
 		// Abrir y leer el archivo de configuración
 		Properties config = new Properties();
-		try (var f_reader = new FileReader(nombreArchivoPropiedades)) {
+		try (var f_reader = new FileReader(rutaArchivoPropiedades)) {
 			config.load(f_reader);
 		} catch (FileNotFoundException e) {
-			throw new RuntimeException("No se encontró el archivo de configuración: " + nombreArchivoPropiedades);
+			throw new RuntimeException("No se encontró el archivo de configuración: " + rutaArchivoPropiedades);
 		} catch (IOException e) {
 			throw new RuntimeException("Error al leer el archivo del configuración.", e);
 		}
